@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    activation_token VARCHAR(255) UNIQUE,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('CUSTOMER', 'OWNER', 'ADMIN')),
+    active BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE
+);

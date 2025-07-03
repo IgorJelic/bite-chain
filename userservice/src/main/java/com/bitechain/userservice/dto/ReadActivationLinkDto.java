@@ -1,4 +1,8 @@
 package com.bitechain.userservice.dto;
 
-public record ReadActivationLinkDto() {
+import java.net.URI;
+
+public record ReadActivationLinkDto(
+        URI link
+) {
 }
