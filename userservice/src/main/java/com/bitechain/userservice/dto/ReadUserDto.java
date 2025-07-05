@@ -1,6 +1,5 @@
 package com.bitechain.userservice.dto;
 
-
 import com.bitechain.userservice.model.User;
 
 import java.time.Instant;

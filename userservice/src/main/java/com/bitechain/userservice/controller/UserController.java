@@ -5,6 +5,7 @@ import com.bitechain.userservice.dto.ReadUserDto;
 import com.bitechain.userservice.dto.WriteUserDto;
 import com.bitechain.userservice.model.Role;
 import com.bitechain.userservice.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ import java.util.UUID;
 
 // DB run command:
 // docker run -d \
-//  --name pgdb \
+//  --name pgdb-users \
 //  -e POSTGRES_USER=postgres \
 //  -e POSTGRES_PASSWORD=postgres \
 //  -e POSTGRES_DB=bitechain-usersdb \
@@ -81,7 +82,7 @@ public class UserController {
 
   // http://localhost:8081/api/v1/users/register/customer
   @PostMapping("/register/customer")
-  public ResponseEntity<ReadUserDto> createCustomer(@RequestBody WriteUserDto customer) {
+  public ResponseEntity<ReadUserDto> createCustomer(@Valid @RequestBody WriteUserDto customer) {
     var createdUser = userService.createCustomer(customer);
 
     return ResponseEntity
@@ -92,7 +93,7 @@ public class UserController {
 
   // http://localhost:8081/api/v1/users/register/owner
   @PostMapping("/register/owner")
-  public ResponseEntity<ReadUserDto> createOwner(@RequestBody WriteUserDto owner) {
+  public ResponseEntity<ReadUserDto> createOwner(@Valid @RequestBody WriteUserDto owner) {
     var createdUser = userService.createOwner(owner);
 
     return ResponseEntity
