@@ -2,6 +2,7 @@ package com.bitechain.userservice.controller;
 
 import com.bitechain.userservice.dto.ReadActivationLinkDto;
 import com.bitechain.userservice.dto.ReadUserDto;
+import com.bitechain.userservice.dto.ReadUserExistsDto;
 import com.bitechain.userservice.dto.WriteUserDto;
 import com.bitechain.userservice.model.Role;
 import com.bitechain.userservice.service.UserService;
@@ -78,6 +79,18 @@ public class UserController {
             .status(HttpStatus.OK)
             .header("version", "v1")
             .body(user);
+  }
+
+  // http://localhost:8081/api/v1/users/exists/{id}
+  @GetMapping("/exists/{id}")
+  public ResponseEntity<ReadUserExistsDto> userExists(
+          @PathVariable UUID id) {
+    ReadUserExistsDto exists = userService.userExists(id);
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .header("version", "v1")
+            .body(exists);
   }
 
   // http://localhost:8081/api/v1/users/register/customer

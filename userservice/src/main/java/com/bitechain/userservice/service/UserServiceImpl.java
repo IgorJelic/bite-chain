@@ -3,6 +3,7 @@ package com.bitechain.userservice.service;
 import com.bitechain.userservice.configuration.AppConfiguration;
 import com.bitechain.userservice.dto.ReadActivationLinkDto;
 import com.bitechain.userservice.dto.ReadUserDto;
+import com.bitechain.userservice.dto.ReadUserExistsDto;
 import com.bitechain.userservice.dto.WriteUserDto;
 import com.bitechain.userservice.exception.UserBadRequestException;
 import com.bitechain.userservice.exception.UserConflictException;
@@ -44,6 +45,12 @@ public class UserServiceImpl implements UserService{
     var user = userRepository.findById(id);
     return user.map(ReadUserDto::new)
             .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+  }
+
+  @Override
+  public ReadUserExistsDto userExists(UUID id) {
+    var exists = userRepository.existsById(id);
+    return new ReadUserExistsDto(id, exists);
   }
 
   @Override

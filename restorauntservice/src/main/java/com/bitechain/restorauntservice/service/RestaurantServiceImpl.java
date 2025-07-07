@@ -1,10 +1,12 @@
 package com.bitechain.restorauntservice.service;
 
+import com.bitechain.restorauntservice.client.UserClient;
 import com.bitechain.restorauntservice.dto.ReadRestaurantDto;
 import com.bitechain.restorauntservice.dto.ReadWorkingHourDto;
 import com.bitechain.restorauntservice.dto.WriteRestaurantDto;
 import com.bitechain.restorauntservice.exception.RestaurantConflictException;
 import com.bitechain.restorauntservice.exception.RestaurantNotFoundException;
+import com.bitechain.restorauntservice.exception.UserNotFoundException;
 import com.bitechain.restorauntservice.model.Restaurant;
 import com.bitechain.restorauntservice.repository.RestaurantRepository;
 import com.bitechain.restorauntservice.repository.specification.RestaurantSpecifications;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RestaurantServiceImpl implements  RestaurantService {
   private final RestaurantRepository restaurantRepository;
+  private final UserClient userClient;
 
   @Override
   public List<ReadRestaurantDto> listRestaurants(Optional<UUID> ownerId, Optional<String> city) {
@@ -63,7 +66,10 @@ public class RestaurantServiceImpl implements  RestaurantService {
       throw new RestaurantConflictException("Restaurant with name " + restaurantDto.name() + " already exists");
     }
 
-    // TODO: Check if owner exists
+    var userExists = userClient.userExists(restaurantDto.ownerId());
+    if (!userExists.exists()) {
+      throw new UserNotFoundException("Owner with id " + restaurantDto.ownerId() + " does not exist");
+    }
 
     var restaurant = restaurantDto.getRestaurant();
     restaurant = restaurantRepository.save(restaurant);
