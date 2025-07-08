@@ -9,5 +9,6 @@ import java.util.UUID;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, UUID>, JpaSpecificationExecutor<Restaurant> {
   boolean existsByName(String name);
+
   Optional<Restaurant> findByName(String name);
 }

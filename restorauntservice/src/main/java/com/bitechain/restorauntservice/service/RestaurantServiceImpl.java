@@ -2,40 +2,33 @@ package com.bitechain.restorauntservice.service;
 
 import com.bitechain.restorauntservice.client.UserClient;
 import com.bitechain.restorauntservice.dto.ReadRestaurantDto;
+import com.bitechain.restorauntservice.dto.ReadRestaurantExistsDto;
 import com.bitechain.restorauntservice.dto.ReadWorkingHourDto;
 import com.bitechain.restorauntservice.dto.WriteRestaurantDto;
 import com.bitechain.restorauntservice.exception.RestaurantConflictException;
 import com.bitechain.restorauntservice.exception.RestaurantNotFoundException;
 import com.bitechain.restorauntservice.exception.UserNotFoundException;
-import com.bitechain.restorauntservice.model.Restaurant;
 import com.bitechain.restorauntservice.repository.RestaurantRepository;
 import com.bitechain.restorauntservice.repository.specification.RestaurantSpecifications;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RestaurantServiceImpl implements  RestaurantService {
+public class RestaurantServiceImpl implements RestaurantService {
   private final RestaurantRepository restaurantRepository;
   private final UserClient userClient;
 
   @Override
-  public List<ReadRestaurantDto> listRestaurants(Optional<UUID> ownerId, Optional<String> city) {
-    Specification<Restaurant> spec = RestaurantSpecifications.all();
-
-    if (ownerId.isPresent()) {
-      spec = spec.and(RestaurantSpecifications.byOwnerId(ownerId.get().toString()));
-    }
-    if (city.isPresent()) {
-      spec = spec.and(RestaurantSpecifications.byCity(city.get()));
-    }
+  public List<ReadRestaurantDto> listRestaurants(UUID ownerId, String city) {
+    var spec = RestaurantSpecifications.all()
+            .and(RestaurantSpecifications.byOwnerId(ownerId))
+            .and(RestaurantSpecifications.byCity(city));
 
     var restaurants = restaurantRepository.findAll(spec);
     return restaurants.stream().map(ReadRestaurantDto::new)
@@ -52,6 +45,12 @@ public class RestaurantServiceImpl implements  RestaurantService {
   }
 
   @Override
+  public ReadRestaurantExistsDto restaurantExists(UUID restaurantId) {
+    var exists = restaurantRepository.existsById(restaurantId);
+    return new ReadRestaurantExistsDto(restaurantId, exists);
+  }
+
+  @Override
   public ReadRestaurantDto getRestaurantByName(String name) {
     var restaurant = restaurantRepository.findByName(name);
     if (restaurant.isEmpty()) {
@@ -62,7 +61,7 @@ public class RestaurantServiceImpl implements  RestaurantService {
 
   @Override
   public ReadRestaurantDto createRestaurant(WriteRestaurantDto restaurantDto) {
-    if (restaurantRepository.existsByName(restaurantDto.name())) {;
+    if (restaurantRepository.existsByName(restaurantDto.name())) {
       throw new RestaurantConflictException("Restaurant with name " + restaurantDto.name() + " already exists");
     }
 
@@ -115,4 +114,6 @@ public class RestaurantServiceImpl implements  RestaurantService {
             .map(ReadWorkingHourDto::new)
             .collect(Collectors.toList());
   }
+
+
 }

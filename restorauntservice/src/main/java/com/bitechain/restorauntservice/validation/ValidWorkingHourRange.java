@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidWorkingHourRange {
   String message() default "closeTime must be after openTime";
+
   Class<?>[] groups() default {};
+
   Class<? extends Payload>[] payload() default {};
 }

@@ -1,4 +1,4 @@
-package com.bitechain.userservice.exception;
+package com.bitechain.menuservice.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,29 +18,11 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-  @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity<ProblemDetail> handleUserNotFoundException(UserNotFoundException ex) {
+  @ExceptionHandler(ItemNotFoundException.class)
+  public ResponseEntity<ProblemDetail> handleItemNotFoundException(ItemNotFoundException ex) {
     var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
-            .header("version", "v1")
-            .body(problemDetail);
-  }
-
-  @ExceptionHandler(UserBadRequestException.class)
-  public ResponseEntity<ProblemDetail> handleUserBadRequestException(UserBadRequestException ex) {
-    var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
-    return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .header("version", "v1")
-            .body(problemDetail);
-  }
-
-  @ExceptionHandler(UserConflictException.class)
-  public ResponseEntity<ProblemDetail> handleUserConflictException(UserConflictException ex) {
-    var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-    return ResponseEntity
-            .status(HttpStatus.CONFLICT)
             .header("version", "v1")
             .body(problemDetail);
   }

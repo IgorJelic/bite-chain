@@ -9,12 +9,12 @@ import java.time.LocalTime;
 
 @ValidWorkingHourRange
 public record WriteWorkingHourDto(
-  @NotBlank
-  DayOfWeek dayOfWeek,
-  @NotBlank
-  LocalTime openTime,
-  @NotBlank
-  LocalTime closeTime
+        @NotBlank
+        DayOfWeek dayOfWeek,
+        @NotBlank
+        LocalTime openTime,
+        @NotBlank
+        LocalTime closeTime
 ) {
   public WorkingHour getWorkingHour() {
     WorkingHour workingHour = new WorkingHour();

@@ -1,6 +1,7 @@
 package com.bitechain.restorauntservice.controller;
 
 import com.bitechain.restorauntservice.dto.ReadRestaurantDto;
+import com.bitechain.restorauntservice.dto.ReadRestaurantExistsDto;
 import com.bitechain.restorauntservice.dto.ReadWorkingHourDto;
 import com.bitechain.restorauntservice.dto.WriteRestaurantDto;
 import com.bitechain.restorauntservice.dto.WriteWorkingHourDto;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 //DB run command:
@@ -31,7 +31,7 @@ import java.util.UUID;
 //-e POSTGRES_USER=postgres \
 //-e POSTGRES_PASSWORD=postgres \
 //-e POSTGRES_DB=bitechain-restorauntdb \
-//-p 5432:5432 \
+//-p 5433:5432 \
 //postgres:15-alpine
 
 @RestController
@@ -53,12 +53,12 @@ public class RestaurantController {
   // http://localhost:8082/api/v1/restaurants?ownerId=<UUID>&city=<city>
   @GetMapping
   public ResponseEntity<List<ReadRestaurantDto>> getRestaurants(
-          @RequestParam(name = "ownerId", required = false)UUID ownerId,
-          @RequestParam(name = "city", required = false)String city
-          ) {
+          @RequestParam(name = "ownerId", required = false) UUID ownerId,
+          @RequestParam(name = "city", required = false) String city
+  ) {
     var restaurants = restaurantService.listRestaurants(
-            Optional.ofNullable(ownerId),
-            Optional.ofNullable(city));
+            ownerId,
+            city);
 
     return ResponseEntity
             .status(HttpStatus.OK)
@@ -74,6 +74,16 @@ public class RestaurantController {
             .status(HttpStatus.OK)
             .header("version", "v1")
             .body(restaurant);
+  }
+
+  // http://localhost:8082/api/v1/restaurants/exists/<id>
+  @GetMapping("/exists/{id}")
+  public ResponseEntity<ReadRestaurantExistsDto> restaurantExists(@PathVariable UUID id) {
+    var exists = restaurantService.restaurantExists(id);
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .header("version", "v1")
+            .body(exists);
   }
 
   // http://localhost:8082/api/v1/restaurants/name/<name>

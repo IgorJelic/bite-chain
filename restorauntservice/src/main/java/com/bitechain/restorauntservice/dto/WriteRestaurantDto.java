@@ -7,16 +7,16 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.UUID;
 
 public record WriteRestaurantDto(
-  @NotBlank
-  String name,
-  @NotBlank
-  String description,
-  @Valid
-  WriteAddressDto address,
-  String website,
-  String imageUrl,
-  @NotBlank
-  UUID ownerId
+        @NotBlank
+        String name,
+        @NotBlank
+        String description,
+        @Valid
+        WriteAddressDto address,
+        String website,
+        String imageUrl,
+        @NotBlank
+        UUID ownerId
 ) {
   public Restaurant getRestaurant() {
     Restaurant restaurant = new Restaurant();

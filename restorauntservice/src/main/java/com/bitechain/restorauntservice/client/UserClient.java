@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(url = "${user.service.url}")
+@FeignClient(name = "user-service", url = "${user.service.url}")
 public interface UserClient {
   @GetMapping("/api/v1/users/exists/{userId}")
   ReadUserExistsDto userExists(@PathVariable UUID userId);

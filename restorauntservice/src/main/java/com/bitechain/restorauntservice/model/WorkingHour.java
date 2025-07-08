@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Entity
 @Table(
-  name = "working_hours",
-  uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"restaurant_id", "day_of_week"})
-  }
+        name = "working_hours",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"restaurant_id", "day_of_week"})
+        }
 )
 @Data
 public class WorkingHour {

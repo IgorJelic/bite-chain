@@ -6,4 +6,5 @@ public record ReadProblemDetailDto(
         String title,
         String detail,
         HttpStatus status
-) {}
+) {
+}

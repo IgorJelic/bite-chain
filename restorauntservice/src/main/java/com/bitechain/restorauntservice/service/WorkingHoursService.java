@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface WorkingHoursService {
   ReadWorkingHourDto addWorkingHour(UUID restaurantId, WriteWorkingHourDto dto);
+
   ReadWorkingHourDto updateWorkingHour(UUID hourId, WriteWorkingHourDto dto);
+
   void deleteWorkingHour(UUID hourId);
 }

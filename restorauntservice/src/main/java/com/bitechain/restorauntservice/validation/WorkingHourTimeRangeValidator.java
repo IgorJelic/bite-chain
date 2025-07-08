@@ -13,8 +13,8 @@ public class WorkingHourTimeRangeValidator implements ConstraintValidator<ValidW
     if (!isValid) {
       constraintValidatorContext.disableDefaultConstraintViolation();
       constraintValidatorContext.buildConstraintViolationWithTemplate("closeTime must be after openTime")
-          .addPropertyNode("closeTime")
-          .addConstraintViolation();
+              .addPropertyNode("closeTime")
+              .addConstraintViolation();
     }
 
     return isValid;
